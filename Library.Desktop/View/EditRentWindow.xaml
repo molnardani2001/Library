@@ -1,0 +1,58 @@
+﻿<Window x:Class="Library.Desktop.View.EditRentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Library.Desktop.View"
+        xmlns:viewModel="clr-namespace:Library.Desktop.ViewModel"
+        mc:Ignorable="d"
+        Title="Foglalás módosítása" Height="Auto" Width="400"
+        ResizeMode="NoResize" SizeToContent="Height" d:DataContext="{d:DesignInstance viewModel:MainViewModel}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding CancelEditRentCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <local:BoolToIndexConverter x:Key="BoolConverter"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Kezdeti időpont:" VerticalAlignment="Center" />
+        <DatePicker Grid.Row="0" Grid.Column="1" Margin="5"
+                 SelectedDate="{Binding EditableRent.Start}" />
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Visszaviteli határidő:" VerticalAlignment="Center" />
+        <DatePicker Grid.Row="1" Grid.Column="1" Margin="5"
+                 SelectedDate="{Binding EditableRent.End}" />
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Aktív-e" VerticalAlignment="Center"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" SelectedIndex="{Binding EditableRent.IsActive, Converter={StaticResource BoolConverter}}">
+            <ComboBoxItem Content="Igen"/>
+            <ComboBoxItem Content="Nem"/>
+        </ComboBox>
+
+        <Button Grid.Row="3" Grid.Column="0" Content="Mégsem"
+                HorizontalAlignment="Left" VerticalAlignment="Center"
+                Width="73"  Height="21"  Margin="5"
+                IsCancel="True"
+                Command="{Binding CancelEditRentCommand}"/>
+
+        <Button Grid.Row="3" Grid.Column="1" Content="Mentés"
+                HorizontalAlignment="Right" VerticalAlignment="Center"
+                Width="73"  Height="21"  Margin="5"
+                IsDefault="True"
+                Command="{Binding SaveRentCommand}"/>
+    </Grid>
+</Window>

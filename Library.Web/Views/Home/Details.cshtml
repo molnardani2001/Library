@@ -1,0 +1,56 @@
+﻿@using Library.Data
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Library.Data.Book
+
+    <div class="datas">
+        <a class="largeCoverImage" asp-controller="Home" asp-action="Image" asp-route-bookId="@Model.Id" asp-route-large="true" target="_blank">
+            <img src="@Url.Action("Image", new { bookId = Model.Id, large = true})" />
+        </a>
+        <span class="detailsTitle">@Model.Title</span> <br />
+        <span class="detailsWriter">Szerző: @Model.Writer</span> <br />
+        <span class="detailsYear">Kiadási év: @Model.Year</span> <br />
+        <span class="detailsNumber">ISBN azonosító: @Model.ISBNNumber</span> <br />
+        <span class="detailsPopularityNumber">Összes foglalások száma: @Model.PopularityNumber</span> <br />
+        @{
+            int cntr = 0;
+            foreach(Volume volume in Model.Volumes)
+            {
+                foreach(Rent rent in volume.Rents)
+                {
+                    cntr += rent.IsActive ? 1 : 0;
+                }
+            }
+        }
+        <span class="detailsActiveRents">Ezek közül aktív: @cntr</span>
+    </div>
+
+    <div class="volumes">
+        @foreach(Volume volume in Model.Volumes)
+        {
+            <div class="volume">
+                <span class="volumeTitle">@Model.Title</span>
+                <span class="linkToRent"><a asp-controller="Rent" asp-action="Index" asp-route-bookId="@Model.Id" asp-route-volumeId="@volume.Id" class="linkButton">Foglalás</a> </span> <br />
+                <span >Foglalások: @volume.Rents.Count()</span> <br />
+                @foreach(Rent rent in volume.Rents)
+                {
+                    @*a múltbeli foglalásokat nem írjuk ki*@
+                    if(DateTime.Now <= rent.End)
+                    {   
+                        <div class="rent">
+                            <span>Kezdet: @rent.Start - </span>
+                            <span>Vége: @rent.End   |   </span>
+                        @if (rent.IsActive)
+                        {
+                            <span style="color:green">Aktív</span>
+                        }
+                        else
+                        {
+                            <span style="color:red">Nem aktív</span>
+                        }
+                    </div>
+                    }
+                    
+                }
+            </div>
+        }
+    </div>

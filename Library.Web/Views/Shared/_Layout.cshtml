@@ -1,0 +1,68 @@
+﻿@using Library.Web.Models;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Molnár könyvtár honlapja</title>
+    
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/site.css" />
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+    </environment>
+</head>
+<body>
+    <div class="header">
+        <h1><a asp-controller="Home" asp-action="Index" class="logo">Molnár könyvtár</a></h1>
+        <div class="account">
+            @if(ViewBag.CurrentGuestName == null)
+            {
+                <table>
+                    <tr>
+                        <td>
+                            <a asp-controller="Account" asp-action="Login" class="linkButton"><span>Bejelentkezés</span></a>
+                        </td>
+                        <td>
+                            <a asp-controller="Account" asp-action="Register" class="linkButton"><span>Regisztráció</span></a>
+                        </td>
+                    </tr>
+                </table>
+            }else
+            {
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            Üdvözöljük, @ViewBag.CurrentGuestName!
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a asp-controller="Account" asp-action="Logout" class="linkButton">Kijelentkezés</a>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr></tr>
+                </table>
+            }
+            
+        </div>
+    </div>
+    <div class="main">
+      @RenderBody()
+    </div>
+
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

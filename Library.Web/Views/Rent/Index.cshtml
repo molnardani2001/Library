@@ -1,0 +1,61 @@
+﻿@using Library.Web.Models;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Library.Data
+
+@model RentViewModel
+
+    <ol class="rents">
+    @foreach(Rent rent in Model.Volume.Rents)
+    {
+        <li calss="rent">
+          @rent.Start - @rent.End | @if(rent.IsActive) { <span style="color:green">Aktív</span>}else{ <span style="color:red">Nem aktív</span>}
+         </li>
+     }
+    </ol>
+
+    <form asp-controller="Rent" asp-action="Index" asp-route-bookId = "@Model.Book.Id" asp-route-volumeId="@Model.Volume.Id">
+        <table>
+            <tr>
+                <td colspan="2" @*valign="middle"*@>
+                    @* globális modellhibák megjelenítése *@
+                    <div asp-validation-summary="ModelOnly" class="failureNotification"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" valign="middle">
+                    <div class="contentHead">
+                        Foglalási adatok:
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Foglalás kezdete:
+                </td>
+                <td class="failureNotification">
+                    <input asp-for="Start" />
+                    <span asp-validation-for="Start"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Foglalás vége:
+                </td>
+                <td class="failureNotification">
+                    <input asp-for="End" />
+                    <span asp-validation-for="End"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left">
+                    <input type="submit" value="Foglalás" class="button" />
+                </td>
+            </tr>
+        </table>
+    </form>
+
+
+
+@section Scripts{
+   <partial name="_ValidationScriptsPartial" />
+}

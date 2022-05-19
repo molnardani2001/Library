@@ -1,0 +1,102 @@
+﻿@using Library.Web.Models;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Library.Data
+
+@model IList<Library.Data.Book>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="noContentText">Nincs találat</div>
+        <a asp-controller="Home" asp-action="Index">Vissza a főoldalra</a>
+    }
+    else
+    {
+       <div class="searchingBar">
+           <form asp-controller="Home" asp-action="Index" method="get">
+                @if(ViewBag.Search == "")
+                {
+                    <input type="search" name="search" placeholder="Keresés...">
+                }
+                else
+                {
+
+                    <input type="search" name="search" value="@ViewBag.Search" placeholder="Keresés...">
+                } 
+                <input type="submit" value="Keresés">
+            </form>
+       </div>
+
+       <div class="sortings">
+            @if(ViewBag.Search != "")
+            {
+                <div class="pop_desc"><a asp-controller="Home" asp-action="Index" asp-route-sortOrder="POPULARITYNUMBER_DESC" asp-route-search="@ViewBag.Search">Népszerűségi sorrend (csökkenő)</a></div>
+                <div class="pop_asc"><a asp-controller="Home" asp-action="Index" asp-route-sortOrder="POPULARITYNUMBER_ASC" asp-route-search="@ViewBag.Search">Népszerűségi sorrend (növekvő)</a></div>
+                <div class="lex_desc"><a asp-controller="Home" asp-action="Index" asp-route-sortOrder="TITLE_ASC" asp-route-search="@ViewBag.Search">Lexikografikus rendezés (A-Z)</a></div>
+                <div class="lex_asc"><a asp-controller="Home" asp-action="Index" asp-route-sortOrder="TITLE_DESC" asp-route-search="@ViewBag.Search">Lexikografikus rendezés (Z-A)</a></div>
+            }
+            else
+            {
+                <div class="pop_desc"><a asp-controller="Home" asp-action="Index" asp-route-sortOrder="POPULARITYNUMBER_DESC">Népszerűségi sorrend (csökkenő)</a></div>
+                <div class="pop_asc"><a asp-controller="Home" asp-action="Index" asp-route-sortOrder="POPULARITYNUMBER_ASC">Népszerűségi sorrend (növekvő)</a></div>
+                <div class="lex_desc"><a asp-controller="Home" asp-action="Index" asp-route-sortOrder="TITLE_ASC">Lexikografikus rendezés (A-Z)</a></div>
+                <div class="lex_asc"><a asp-controller="Home" asp-action="Index" asp-route-sortOrder="TITLE_DESC">Lexikografikus rendezés (Z-A)</a></div>
+            }
+            
+           
+       </div>
+
+       <div class="booksList">
+            <hr />
+            @foreach(Book book in Model)
+            {
+                <div class="book">
+                    <img src=@Url.Action("ImageForBook", new {bookId = book.Id}) class="coverImage"/>
+                    <div class="info">
+                        <span class="title"><strong>Cím:</strong> @book.Title</span> <br>
+                        <span class="writer"><strong>Szerző:</strong> @book.Writer</span> <br>
+                        <span class="year"><strong>Kiadási év:</strong> @book.Year</span> <br>
+                        <span class="isbn"><strong>ISBN azonosító: </strong> @book.ISBNNumber</span> <br>
+                        <span class="details"><a asp-controller="Home" asp-action="Details" asp-route-bookId="@book.Id">Részletek >></a></span>
+                    </div>
+                </div>
+                <hr style="clear:both;"/>
+            }
+        </div>
+        <div class="navigation">
+            @if(ViewBag.Search == "" && ViewBag.PageNumber != null && ViewBag.PageNumber != 1)
+            {
+                int prevNumber = ViewBag.PageNumber - 1;
+                <div class="previous">
+                    <a asp-controller="Home" asp-action="Index" asp-route-page="@prevNumber" asp-route-sortOrder="@ViewBag.SortOrder">Előző oldal</a>
+                </div>
+            }
+            @if(ViewBag.Search == "" && ViewBag.PageNumber != null && ViewBag.PageNumber != ViewBag.MaxPageNumber)
+            {
+                int nextNumber = ViewBag.PageNumber + 1;
+                <div class="next">
+                    <a asp-controller="Home" asp-action="Index" asp-route-page="@nextNumber" asp-route-sortOrder="@ViewBag.SortOrder">Következő oldal</a>
+                </div>
+            }
+
+
+            @*----------------------------------------------------------------------------------------------------------------------------------------------------------------------*@
+            
+            
+            @if(ViewBag.Search != "" && ViewBag.PageNumber != null && ViewBag.PageNumber != 1)
+            {
+                int prevNumber = ViewBag.PageNumber - 1;
+                <div class="previous">
+                    <a asp-controller="Home" asp-action="Index" asp-route-page="@prevNumber" asp-route-sortOrder="@ViewBag.SortOrder" asp-route-search="@ViewBag.Search">Előző oldal</a>
+                </div>
+            }
+            @if(ViewBag.Search != "" && ViewBag.PageNumber != null && ViewBag.PageNumber != ViewBag.CurrentBooks)
+            {
+                int nextNumber = ViewBag.PageNumber + 1;
+                <div class="next">
+                    <a asp-controller="Home" asp-action="Index" asp-route-page="@nextNumber" asp-route-sortOrder="@ViewBag.SortOrder" asp-route-search="@ViewBag.Search">Következő oldal</a>
+                </div>
+            }
+        </div>
+
+    }
+

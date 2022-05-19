@@ -1,0 +1,8 @@
+﻿@using Library.Web.Models;
+
+@model RentViewModel
+
+
+    <h1>Foglalását sikeresen rögzítettük!</h1>
+    <p>A kötetet <strong>@Model.Start</strong> napon veheti át, és legkésőbb <strong>@Model.End</strong> - ig kell visszavinnie a könyvtárba!</p>
+    <a asp-controller="Home" asp-action="Index" class="linkButton">Vissza a főoldalra</a>
